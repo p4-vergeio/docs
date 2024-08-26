@@ -1,23 +1,26 @@
-<link rel="stylesheet" href="/docs/stylesheets/bcstyles.css" >
 
-# DRAFT -- New Installation Guide
+# Installation Guide
 
+## Introduction
+The VergeOS installation is a single [bootable ISO image](/docs/implementation-guide/install-media) containing all packages needed for the complete System. 
 
 This document provides general instructions for installing a VergeOS system.   <!-- VergeOS is designed to be flexible for different environments.  --> 
-For production systems, use datacenter-quality hardware and follow Reference architecture recommendations.
+For production systems, use datacenter-quality hardware and follow [Reference architecture](/docs/implementation-guide/reference-architecture/edge/) recommendations.
 <!-- would like to have a link to send them to here - perhaps we can add a general landing page for ref arch..[Reference architecture Recommendations](/docs/implementation-guide/concepts).-->
 
+### Installation Process
 
-## Installation Overview
-The VergeOS installation is a single [bootable ISO image](/docs/implementation-guide/install-media) containing all packages needed for a complete VergeOS system.  
-
-<br>
-
-### Installation Process 
-![installflow.png](/docs/assets/installflow.png)
-
+```mermaid
+graph LR
+    A["Pre-Install<br>- Establish network info<br>- Verify BIOS settings"] --> B["Install Primary<br>Controller Node"]
+    B --> C["Install Secondary<br>Controller Node"]
+    C --> D["Install Additional<br>Nodes, as needed<br>Scale-out compute,<br>FTE"]
+    D --> E["Verify your System"]
+    E --> F["Next Steps<br>Post-Install Checklist"]
+```
 
 ## Preinstall
+
 ### Network
 1.  Establish the networks that will be used for your new VergeOS system and check your network cabling. Verify each node is connected to each core fabric switch. 
 
@@ -25,18 +28,16 @@ The VergeOS installation is a single [bootable ISO image](/docs/implementation-g
 
 3. **If necessary, have VLAN id(s) available** to specify during install. PVID ports are always preferred, but VLAN tags can be accommodated where necessary.
 
-4. vSAN Encryption - It is important to determine if you will be using optional AE6256 encryption for the vSAN as this option cannot be changed after installation. If encryption will be selected, the generated key can be saved to a USB drive or other dedicated storage device; this device will need to be plugged in before that point of the installation.   
-
+4. vSAN Encryption - It is important to determine if you will be using optional AES256 encryption for the vSAN as this option cannot be changed after installation. If encryption will be selected, the generated key can be saved to a USB drive or other dedicated storage device; this device will need to be plugged in before that point of the installation.
 
 ### Server BIOS settings
 Proper BIOS settings will help towards ensuring successful VergeOS operation. 
 These BIOS settings should be verified on each node prior to install: 
 
-- Virtualization enabled 
-- All storage adapters and/or RAID cards set to JBOD
+- Virtualization enabled
+- All storage adapters and/or RAID cards set to HBA, JBOD, or Passthrough mode
 
-
-
+---
 ## Install the Primary Controller Node 
 !!! warning "VergeOS is installed as a complete operating system on each node.  Selected drives are formatted and existing data on those drives will be lost." 
 
@@ -46,42 +47,45 @@ These BIOS settings should be verified on each node prior to install:
 3. Select **Controller** (default selection). The first two nodes of the system will be controller nodes.
 4. Select **Yes** to indicate this is a **New Install**.
 5. Select appropriate **date/time, time zone and NTP server settings**.  
-  * Correct date/time are very important for vSAN operation.  Be sure that during installation, date is set correctly and time is set reasonably close to the accurate time, to avoid potential problems.  
+!!! info "Correct date/time are very important for vSAN operation.  Be sure that during installation, date is set correctly and time is set reasonably close to the accurate time, to avoid potential problems."
   * Time zone selection is generally based on the geographical location of the servers, but can alternately be configured based on administration preference.  Windows VMs will, by default, inherit the system time zone; a registry change is required to configure a Windows VM to UTC time.  
 
 
-6. Enter a **System Name**.  This will be the name of your VergeOS Cloud; it will appear in your: dashboard, alerts and reports coming from this system, and site syncs. Your Cloud name can be changed post-install from within the UI. 
+6. Enter a **System Name**. This will be the name of your VergeOS System; it will appear in your: dashboard, alerts and reports coming from this system, and site syncs. Your Cloud name can be changed post-install from within the UI. 
 
 7. Enter **admin user credentials**.  The password must be at least 8 characters. These credentials can be changed post-install, however it is important to have username/password available for initial login to the system.
 
-!!! warning "Make sure to note the admin user credentials established during install; without them, you may be left with no way to access the system." 
+<!-- !!! warning "Make sure to note the admin user credentials established during install; without them, you may be left with no way to access the system." -->
 
 8. Enter **admin email address**.  This address is used for admin account password resets and receiving subscription alerts/reports directed to the admin user.
-
 
 ### Configuring Physical Networks
 
 **The following steps are used to define each of the physical networks for the node.**
   <!-- possibly something here about the abstraction put in place for flexibility, ease of configuration...helps accomodate lots of different configuration options based on how many networks you will employ, use of vlans, bonded ports, etc.--> 
 
-9. A list of all detected NICs is displayed.
+9. How many physical networks will you be plugging into?
+
+!!! note "A bonded network, whether LACP or Active/Backup, equals 1 physical network connection"
+
+10. A list of all detected NICs is displayed.
   **Select a NIC (or multiple NICs, for port-bonded)**, to configure the associated physical network.  **Port bonding (LAG) should not be used for core networks** as it will interfere with the built-in redundancy based on multiple physical core networks.
 
 
 10. **Specify Physical Network Settings:**
 !!! tip "**Keyboard Hints:** [Tab] does not move field-to-field, but rather between action items (Finish/Edit/Cancel).  [Enter] toggles edit mode. When edit mode is OFF, an entry field is highlighted in blue, and you can move between fields with the up/down arrow keys.  When edit mode is ON, you can modify the field with the cursor."
 
-    * **Name** - This name will be used in the User interface to identify this network. Enter a name that will help to identify where the NIC(s) is plugged in, such as the switch hostname or organizational naming convention.
-    
-    * **Description** (optional) - Text can be entered here to provide any additional administrative information. 
+* **Name** - This name will be used in the User interface to identify this network. Enter a name that will help to identify where the NIC(s) is plugged in, such as the switch hostname or organizational naming convention.
 
-    * **MTU*** - The MTU setting must always be a value supported by the physical switching hardware.  For core networks, the MTU should be large enough to support the levels of tenancy that will be provided; the default is 9192, a setting that is compatible with many switches and will support about 5 levels of nested tenancy.  
+* **Description** (optional) - Text can be entered here to provide any additional administrative information. 
 
-    * **Core-Network:** -If a core network will reside here, the value needs to be "yes".  Otherwise, change the value to blank or "no".
+* **MTU*** - The MTU setting must always be a value supported by the physical switching hardware.  For core networks, the MTU should be large enough to support the levels of tenancy that will be provided; the default is 9192, a setting that is compatible with many switches and will support about 5 levels of nested tenancy.  
 
-    * **VLAN** - PVID port is always preferred (0 or blank for none), but a VLAN tag can be accommodated by entering the correct VLAN ID here. 
+* **Core-Network:** -If a core network will reside here, the value needs to be "yes".  Otherwise, change the value to blank or "no".
 
-    !!! tip "* When configuring an external network MTU: The Internet standard MTU for most Ethernet networks is 1500.  The standard for VPN connections is 1400 bytes (will vary depending on the  service)."
+* **VLAN** - PVID port is always preferred (0 or blank for none), but a VLAN tag can be accommodated by entering the correct VLAN ID here. 
+
+!!! tip "* When configuring an external network MTU: The Internet standard MTU for most Ethernet networks is 1500.  The standard for VPN connections is 1400 bytes (will vary depending on the  service)."
 
 11. **Repeat the above steps to configure all of your physical networks** until every NIC has been assigned.  If there is a NIC that is not plugged in, it should still be configured here during installation; it can be given a name such as "unplugged" or "unused".      
 
@@ -151,6 +155,7 @@ The main dashboard for your new system will display.  Status indicators should a
 
 ![initialdashboard.png](/docs/assets/initialdashboard.png)
 
+---
 
 ## Install the Secondary Controller Node
 !!! note "The primary controller node needs to be fully installed and booted before installing the secondary controller node."  
@@ -193,27 +198,5 @@ Additional nodes can be installed as needed. These nodes can be:
 
 <!-- add any additional information needed for these install types, either here or link to separate pages. -->
 
-
-
 ## Next Steps (after node installations)
-When node installations are complete, see [**Post Installation**](/docs/implementation-guide/post-installation) for next steps.   
-
-  
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
+When node installations are complete, see [**Post Installation**](/docs/implementation-guide/post-installation) for next steps.
