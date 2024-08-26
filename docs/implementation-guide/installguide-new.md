@@ -72,7 +72,7 @@ These BIOS settings should be verified on each node prior to install:
   **Select a NIC (or multiple NICs, for port-bonded)**, to configure the associated physical network.  **Port bonding (LAG) should not be used for core networks** as it will interfere with the built-in redundancy based on multiple physical core networks.
 
 
-10. **Specify Physical Network Settings:**
+11. **Specify Physical Network Settings:**
 !!! tip "**Keyboard Hints:** [Tab] does not move field-to-field, but rather between action items (Finish/Edit/Cancel).  [Enter] toggles edit mode. When edit mode is OFF, an entry field is highlighted in blue, and you can move between fields with the up/down arrow keys.  When edit mode is ON, you can modify the field with the cursor."
 
 * **Name** - This name will be used in the User interface to identify this network. Enter a name that will help to identify where the NIC(s) is plugged in, such as the switch hostname or organizational naming convention.
@@ -87,16 +87,16 @@ These BIOS settings should be verified on each node prior to install:
 
 !!! tip "* When configuring an external network MTU: The Internet standard MTU for most Ethernet networks is 1500.  The standard for VPN connections is 1400 bytes (will vary depending on the  service)."
 
-11. **Repeat the above steps to configure all of your physical networks** until every NIC has been assigned.  If there is a NIC that is not plugged in, it should still be configured here during installation; it can be given a name such as "unplugged" or "unused".      
+12. **Repeat the above steps to configure all of your physical networks** until every NIC has been assigned.  If there is a NIC that is not plugged in, it should still be configured here during installation; it can be given a name such as "unplugged" or "unused".      
 
-12. Select a **physical external network that will provide UI/LAN/WAN access**. (Use [Space bar] to select/deselect) 
+13. Select a **physical external network that will provide UI/LAN/WAN access**. (Use [Space bar] to select/deselect) 
 !!! tip "During the installation, select a single external physical network to provide UI access.  If you would like to use multiple physical external networks for UI access, this can be configured post-install from within the UI."
 
 
-13. Enter appropriate **VLAN ID for the External/UI network** Use PVID ports when possible (0 or blank), otherwise enter the appropriate VLAN ID.  
+14. Enter appropriate **VLAN ID for the External/UI network** Use PVID ports when possible (0 or blank), otherwise enter the appropriate VLAN ID.  
 
 
-14. Specify a **network address** for the external/UI network:
+15. Specify a **network address** for the external/UI network:
     * **Static:** Enter the address in CIDR format (for example 10.10.0.0/24).  You will also be prompted for the default gateway and DNS server address(es).
 
     **-OR-**
@@ -104,12 +104,12 @@ These BIOS settings should be verified on each node prior to install:
     * **DHCP:** An entry of blank or "dhcp" allows the network to receive an external DHCP address.  Using DHCP will limit the network to a single IP address; this is typically only appropriate for test/evaluation systems or storage-only systems. If DHCP is selected, you will also be prompted for the name/domain to be used by this DHCP client.
 
 
-15. Enter **license server settings** (username and password).  License server credentials are provided by your VergeOS sales or Implementation representative.  These settings can be left blank during installation and added post-install within the VergeOS UI.  
+16. Enter **license server settings** (username and password).  License server credentials are provided by your VergeOS sales or Implementation representative.  These settings can be left blank during installation and added post-install within the VergeOS UI.  
 
 !!! note "Although license key credentials are not needed to complete the installation, they must be in place in order to run workloads or syncs on your installed system."
 
 
-16. Configure **Encryption settings**. (optional, at-rest encryption).  Encryption selection is not reversible post-install; changing from encrypted to unencrypted or vice-versa would require a system reinstall.
+17. Configure **Encryption settings**. (optional, at-rest encryption).  Encryption selection is not reversible post-install; changing from encrypted to unencrypted or vice-versa would require a system reinstall.
 
     * If encryption is selected, you will be prompted for an **AES256 encryption key passphrase**.
     Passphrase must be between 8 and 64 characters.    
@@ -119,38 +119,36 @@ These BIOS settings should be verified on each node prior to install:
 
 <!--Also, include the information about how the key is not needed for maintenance mode, system updates, etc where a single node reboots at a time?-->
 
-17. **Select drives that will be used in the vSAN**.  All detected drives are displayed and selected by default. **Deselect any drives that should be excluded.  Make sure to deselect any removable devices or any drives that will be used to store an optional encryption key.**   
+18. **Select drives that will be used in the vSAN**.  All detected drives are displayed and selected by default. **Deselect any drives that should be excluded.  Make sure to deselect any removable devices or any drives that will be used to store an optional encryption key.**   
 The system will display an automatically-selected tier for each drive.  Take notice of these tier assignments; they can be modified in a subsequent dialog, if needed.
 
 
 !!! warning "Selected drives display an asterisk;  make sure any drives that you want to deselect do not have the asterisk on the far left before hitting < OK >. "
 
-18. **Change Drive Tier Assignments (optional)**
+19. **Change Drive Tier Assignments (optional)**
 If you verified all drive tiers were selected as desired (previous screen), simply press [Enter] to proceed.  Otherwise, select **< Yes >**
  and **[Enter]** to view all drives and optionally change any tier assignments.
      
  <!--change this sshot to one from a physical system.>  ![selectdiskfortierchg.png](/docs/assets/selectdiskfortierchg.png) -->
 
-
 <!-- insert a link to tier definitions?  and some verbiage about changing them-->
- <br>
 
  ![selecttier.png](/docs/assets/selecttier.png)
 
 
 
 
- 19. Configure **Swap**: There are multiple factors to consider in planning swap including: availability of storage, system use, disk type, etc. Consult with the VergeIO implementation team for further information. <!--Development should discuss this and come up with recommendations/best practices for this -->
+ 20. Configure **Swap**: There are multiple factors to consider in planning swap including: availability of storage, system use, disk type, etc. Consult with the VergeIO implementation team for further information. <!--Development should discuss this and come up with recommendations/best practices for this -->
 
 
 <!-- UEFI partitions?  asks and you should say yes?  Any notes or cautions here? -->
 
 When installation selections are finalized, the vSAN will be initialized and packages installed.  Each selected drive is formatted one by one (large drives may take several minutes to format) and added to the vSAN.
 
-20. The install will indicate when it is complete.  **Remove the install media and hit [Enter] to reboot.** 
+21. The install will indicate when it is complete.  **Remove the install media and hit [Enter] to reboot.** 
 
 ### After Reboot 
-21. When the vSAN is successfully mounted and the system is started, the user menu will appear. Press **[Enter]** to select **User Interface** and enter admin login credentials. 
+222. When the vSAN is successfully mounted and the system is started, the user menu will appear. Press **[Enter]** to select **User Interface** and enter admin login credentials. 
 The main dashboard for your new system will display.  Status indicators should all be green.  
 
 ![initialdashboard.png](/docs/assets/initialdashboard.png)
