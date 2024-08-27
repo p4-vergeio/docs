@@ -130,7 +130,7 @@ nav:
     - VergeOS Pre-Installation: implementation-guide/pre-installation.md
     - VergeOS Installation:
       - Bootable Media: implementation-guide/install-media.md
-      - Installation: implementation-guide/installation-guide.md
+      - Installation: implementation-guide/installguide-new.md
       - Scale Out Nodes: implementation-guide/scale-out-nodes.md
       - Compute Nodes: implementation-guide/compute-nodes.md
       - Storage Nodes: implementation-guide/storage-nodes.md
@@ -185,6 +185,7 @@ nav:
         - Applying Updates: product-guide/runningupdates.md
         - Settings: product-guide/updatesettings.md
         - Air-Gap License: product-guide/airgap-license.md
+      - Advanced Settings: product-guide/advanced-settings.md
     - Virtual Machines:
       - Quick Start:
         - Best Practices: product-guide/VMbestpractices.md

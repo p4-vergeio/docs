@@ -66,38 +66,39 @@ These BIOS settings should be verified on each node prior to install:
 
 9. How many physical networks will you be plugging into?
 
-!!! note "A bonded network, whether LACP or Active/Backup, equals 1 physical network connection"
+!!! tip "A bonded network, whether LACP or Active/Backup, equals 1 physical network connection"
 
 10. A list of all detected NICs is displayed.
-  **Select a NIC (or multiple NICs, for port-bonded)**, to configure the associated physical network.  **Port bonding (LAG) should not be used for core networks** as it will interfere with the built-in redundancy based on multiple physical core networks.
+  **Select a NIC (or multiple NICs, for port-bonded)**, to configure the associated physical network.  
+  
+!!! note "Port bonding (LAG) should not be used for Core Fabric networks as it will interfere with the built-in redundancy based on multiple physical Core Fabric networks."
 
 
 11. **Specify Physical Network Settings:**
 !!! tip "**Keyboard Hints:** [Tab] does not move field-to-field, but rather between action items (Finish/Edit/Cancel).  [Enter] toggles edit mode. When edit mode is OFF, an entry field is highlighted in blue, and you can move between fields with the up/down arrow keys.  When edit mode is ON, you can modify the field with the cursor."
 
-* **Name** - This name will be used in the User interface to identify this network. Enter a name that will help to identify where the NIC(s) is plugged in, such as the switch hostname or organizational naming convention.
+* **Name** - This name will be used in the User interface to identify this network. Enter a name that will help to identify where the NIC(s) is plugged in, such as the switch hostname or organizational naming convention. This can be changed after installation.
 
 * **Description** (optional) - Text can be entered here to provide any additional administrative information. 
 
-* **MTU*** - The MTU setting must always be a value supported by the physical switching hardware.  For core networks, the MTU should be large enough to support the levels of tenancy that will be provided; the default is 9192, a setting that is compatible with many switches and will support about 5 levels of nested tenancy.  
+* **MTU*** - The MTU setting must always be a value supported by the physical switching hardware.  For Core Fabric networks, the MTU should be large enough to support the levels of tenancy that will be provided; the default is 9192.
 
 * **Core-Network:** -If a core network will reside here, the value needs to be "yes".  Otherwise, change the value to blank or "no".
 
-* **VLAN** - PVID port is always preferred (0 or blank for none), but a VLAN tag can be accommodated by entering the correct VLAN ID here. 
+* **VLAN** - PVID port is always preferred (0 or blank for none), but a VLAN tag can be accommodated by entering the correct VLAN ID here.
 
-!!! tip "* When configuring an external network MTU: The Internet standard MTU for most Ethernet networks is 1500.  The standard for VPN connections is 1400 bytes (will vary depending on the  service)."
+12. **Repeat the above steps to configure all of your physical networks** until every NIC has been assigned.  If there is a NIC that is not plugged in, it should still be configured here during installation; it can be given a name such as "unplugged" or "unused".
 
-12. **Repeat the above steps to configure all of your physical networks** until every NIC has been assigned.  If there is a NIC that is not plugged in, it should still be configured here during installation; it can be given a name such as "unplugged" or "unused".      
+!!! tip "When configuring an external network MTU: The Internet standard MTU for most Ethernet networks is 1500.  The standard for VPN connections is 1400 bytes (will vary depending on the service)."
 
-13. Select a **physical external network that will provide UI/LAN/WAN access**. (Use [Space bar] to select/deselect) 
-!!! tip "During the installation, select a single external physical network to provide UI access.  If you would like to use multiple physical external networks for UI access, this can be configured post-install from within the UI."
+13. Select a **physical external network that will provide UI/LAN/WAN access**. (Use [Space bar] to select/deselect).
 
 
 14. Enter appropriate **VLAN ID for the External/UI network** Use PVID ports when possible (0 or blank), otherwise enter the appropriate VLAN ID.  
 
 
 15. Specify a **network address** for the external/UI network:
-    * **Static:** Enter the address in CIDR format (for example 10.10.0.0/24).  You will also be prompted for the default gateway and DNS server address(es).
+    * **Static:** Enter the address in CIDR format (for example 10.0.0.2/24).  You will also be prompted for the default gateway and DNS server address(es).
 
     **-OR-**
 
@@ -135,20 +136,18 @@ If you verified all drive tiers were selected as desired (previous screen), simp
 
  ![selecttier.png](/docs/assets/selecttier.png)
 
-
-
-
  20. Configure **Swap**: There are multiple factors to consider in planning swap including: availability of storage, system use, disk type, etc. Consult with the VergeIO implementation team for further information. <!--Development should discuss this and come up with recommendations/best practices for this -->
 
 
-<!-- UEFI partitions?  asks and you should say yes?  Any notes or cautions here? -->
+21. UEFI partitions - if you're asked to register the UEFI partitions please select "Yes".
 
 When installation selections are finalized, the vSAN will be initialized and packages installed.  Each selected drive is formatted one by one (large drives may take several minutes to format) and added to the vSAN.
 
-21. The install will indicate when it is complete.  **Remove the install media and hit [Enter] to reboot.** 
+22. The install will indicate when it is complete.  **Remove the install media and hit [Enter] to reboot.** 
 
 ### After Reboot 
-222. When the vSAN is successfully mounted and the system is started, the user menu will appear. Press **[Enter]** to select **User Interface** and enter admin login credentials. 
+
+23. When the vSAN is successfully mounted and the system is started, the user menu will appear. Press **[Enter]** to select **User Interface** and enter admin login credentials. 
 The main dashboard for your new system will display.  Status indicators should all be green.  
 
 ![initialdashboard.png](/docs/assets/initialdashboard.png)
@@ -198,3 +197,14 @@ Additional nodes can be installed as needed. These nodes can be:
 
 ## Next Steps (after node installations)
 When node installations are complete, see [**Post Installation**](/docs/implementation-guide/post-installation) for next steps.
+
+---
+
+## Troubleshooting & Support
+
+
+If issues arise during installation:
+
+
+- Press `Esc` to cancel and get a command prompt
+- Type `yb-install` to resume or `yb-install --restart` to start over
