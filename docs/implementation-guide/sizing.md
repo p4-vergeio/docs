@@ -94,6 +94,6 @@ The following table outlines the maximum supported hardware specifications for v
 | Tiers of storage per system     | 5       | tiers         |
 | vSAN Fault domains per system   | 2       | vSAN          |
 
-[^1]: Graphics cards are supported for VM usage and may not function for console access.
+[^1]: Graphics cards are supported for VM usage and not supported for console access.
 [^2]: vSAN nodes require a minimum 1GB of RAM per 1TB of Storage
 [^3]: Virtio-SCSI Interface required
