@@ -277,8 +277,14 @@ nav:
       - Storage Tiers: product-guide/storagetiers.md
       - Preferred Tier: product-guide/preferredtiers.md
       - Removing ISO Files with References: product-guide/removing-isorefs.md
+    - Device Passthrough:
+      - Overview: product-guide/devpass-overview.md
+      - USB Passthrough: product-guide/usbpassthrough.md
+      - vGPU: product-guide/vgpu.md
+      - SRI-IOV: product-guide/sriov.md
+      - Generic PCI Passthrough: product-guide/generic-pcipass.md
     - GPU:
-#      - Overview: product-guide/GPUoverview.md
+      - Overview: product-guide/GPUoverview.md
       - Passthrough: product-guide/GPUPassthrough.md
       - NVIDIA vGPU: product-guide/nvidiavGPU.md
       - Tenant GPU: product-guide/gpu-sharetenant.md
